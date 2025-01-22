@@ -1,0 +1,249 @@
+html:
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Clicker Game</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game">
+        <h1></h1>
+        <button id="clickButton">Click!</button>
+        <p>Score: <span id="score">0</span></p>
+
+        <h2>Upgrades</h2>
+        <button id="upgrade1">Upgrade 1 (Cost: 10)</button>
+        <p>Upgrades Purchased: <span id="numUpgrades">0</span></p>
+        <button id="upgrade2">Upgrade 2 (Cost: 100)</button>
+        <p>Upgrades Purchased: <span id="numUpgrades2">0</span></p>
+
+        <h2>Auto Clickers</h2>
+        <button id="autoClicker1">Auto Clicker (Cost: 50)</button>
+        <p>Auto Clickers: <span id="numAutoClickersDisplay">0</span></p>
+
+        <button id="resetButton">Reset Game</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Clicker Game</title>
+    <style>
+        /* Basic CSS styling - you can add more here */
+        body {
+            font-family: sans-serif;
+            text-align: center;
+        }
+
+        #main-menu {
+            display: block;
+            /* Show the main menu initially */
+        }
+
+        #game-container {
+            display: none;
+            /* Hide the game initially */
+        }
+
+        /* Add more CSS styles for visual appeal */
+    </style>
+</head>
+
+<body>
+    <div id="main-menu">
+        <h1>Welcome to Clicker Game!</h1>
+        <button id="startGame">Start Game</button>
+    </div>
+
+    <div id="game-container">
+        <h1>Clicker Game</h1>
+        <button id="clickButton">Click Me!</button>
+        <p>Score: <span id="score">0</span></p>
+
+        <h2>Upgrades</h2>
+        <button id="upgrade1">Upgrade 1 (Cost: <span id="upgrade1Cost">10</span>)</button>
+        <p>Upgrades Purchased: <span id="numUpgrades">0</span></p>
+        <button id="upgrade2">Upgrade 2 (Cost: <span id="upgrade2Cost">100</span>)</button>
+        <p>Upgrades Purchased: <span id="numUpgrades2">0</span></p>
+
+        <h2>Auto Clickers</h2>
+        <button id="autoClicker1">Auto Clicker 1 (Cost: <span id="autoClicker1Cost">50</span>)</button>
+        <p>Auto Clickers: <span id="numAutoClickersDisplay">0</span></p>
+
+        <button id="resetButton">Reset Game</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
+
+js:
+let score = 0;
+let clickValue = 1;
+let numAutoClickers = 0;
+let autoClickValue = 1;
+let numUpgrades = 0;
+let numUpgrades2 = 0;
+
+const scoreElement = document.getElementById('score');
+const clickButton = document.getElementById('clickButton');
+const upgrade1Button = document.getElementById('upgrade1');
+const upgrade2Button = document.getElementById('upgrade2');
+const autoClicker1Button = document.getElementById('autoClicker1');
+const numUpgradesElement = document.getElementById('numUpgrades');
+const numUpgrades2Element = document.getElementById('numUpgrades2');
+const numAutoClickersDisplay = document.getElementById('numAutoClickersDisplay');
+const resetButton = document.getElementById('resetButton');
+
+// Upgrade costs and effects
+const upgradeCosts = [10, 100];
+const upgradeEffects = [2, 5]; // Increase clickValue by 2 for upgrade1, 5 for upgrade2
+
+// Auto-clicker costs and effects
+const autoClickerCosts = [50];
+const autoClickerEffects = [1]; // Increase auto-click value by 1
+
+// Auto-click function
+function autoClick() {
+score += numAutoClickers * autoClickValue;
+scoreElement.textContent = `Score: ${score}`;
+}
+
+// Set interval for auto-clicking
+setInterval(autoClick, 1000); // Auto-click every second
+
+clickButton.addEventListener('click', () => {
+score += clickValue;
+scoreElement.textContent = `Score: ${score}`;
+});
+
+upgrade1Button.addEventListener('click', () => {
+if (score >= upgradeCosts[0]) {
+score -= upgradeCosts[0];
+clickValue += upgradeEffects[0];
+scoreElement.textContent = `Score: ${score}`;
+numUpgrades++;
+numUpgradesElement.textContent = numUpgrades;
+}
+});
+
+upgrade2Button.addEventListener('click', () => {
+if (score >= upgradeCosts[1]) {
+score -= upgradeCosts[1];
+clickValue += upgradeEffects[1];
+scoreElement.textContent = `Score: ${score}`;
+numUpgrades2++;
+numUpgrades2Element.textContent = numUpgrades2;
+}
+});
+
+autoClicker1Button.addEventListener('click', () => {
+if (score >= autoClickerCosts[0]) {
+score -= autoClickerCosts[0];
+numAutoClickers++;
+scoreElement.textContent = `Score: ${score}`;
+numAutoClickersDisplay.textContent = numAutoClickers;
+}
+});
+
+// Reset Game function
+function resetGame() {
+score = 0;
+clickValue = 1;
+numAutoClickers = 0;
+autoClickValue = 1;
+numUpgrades = 0;
+numUpgrades2 = 0;
+
+scoreElement.textContent = `Score: ${score}`;
+numUpgradesElement.textContent = numUpgrades;
+numUpgrades2Element.textContent = numUpgrades2;
+numAutoClickersDisplay.textContent = numAutoClickers;
+
+// Clear saved game data
+localStorage.removeItem('clickerGameState');
+}
+
+// Save game function
+function saveGame() {
+const gameState = {
+score: score,
+clickValue: clickValue,
+numAutoClickers: numAutoClickers,
+numUpgrades: numUpgrades,
+numUpgrades2: numUpgrades2
+};
+localStorage.setItem('clickerGameState', JSON.stringify(gameState));
+}
+
+// Load game function
+function loadGame() {
+const savedGameState = localStorage.getItem('clickerGameState');
+if (savedGameState) {
+const gameState = JSON.parse(savedGameState);
+score = gameState.score;
+clickValue = gameState.clickValue;
+numAutoClickers = gameState.numAutoClickers;
+numUpgrades = gameState.numUpgrades;
+numUpgrades2 = gameState.numUpgrades2;
+scoreElement.textContent = `Score: ${score}`;
+numAutoClickersDisplay.textContent = numAutoClickers;
+numUpgradesElement.textContent = numUpgrades;
+numUpgrades2Element.textContent = numUpgrades2;
+}
+}
+
+// Save game periodically
+setInterval(saveGame, 10000); // Save every 5 seconds
+
+// Load game on page load
+loadGame();
+
+// Add event listener to the reset button
+resetButton.addEventListener('click', resetGame);
+
+
+css:
+body {
+font-family: sans-serif;
+text-align: center;
+}
+
+#game {
+margin: 20px auto;
+width: 300px;
+border: 1px solid #2828289f;
+padding: 20px;
+border-radius: 5px;
+background-color: #9e9e9e4c;
+}
+
+button {
+padding: 10px 20px;
+margin: 5px;
+border-radius: 3px;
+background-color: #4b9f4e;
+color: white;
+cursor: pointer;
+}
+
+button {
+padding: 10px 20px;
+margin: 5px;
+border-radius: 3px;
+background-image: linear-gradient(to bottom right, #4CAF50, #388E3C);
+color: white;
+cursor: pointer;
+}
+
+button:hover {
+background-image: linear-gradient(to bottom right, #388E3C, #4CAF50);
+transform: scale(1.05);
+}
