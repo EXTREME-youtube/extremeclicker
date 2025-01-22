@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>Clicker Game</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
     <h1>Clicker Game</h1>
     <button id="clickButton">Click Me!</button>
