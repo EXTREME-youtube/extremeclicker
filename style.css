@@ -1,6 +1,7 @@
 body {
     font-family: sans-serif;
-    text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
 #game {
@@ -19,6 +20,7 @@ button {
     background-color: #559b00;
     color: white;
     cursor: pointer;
+    text-align: center;
 }
 
 button {
