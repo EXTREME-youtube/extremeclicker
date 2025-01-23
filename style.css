@@ -34,3 +34,9 @@ button:hover {
     background-image: linear-gradient(to bottom right, #388E3C, #4CAF50);
     transform: scale(1.05);
 }
+  header {
+    background-color: #1a10a896;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+  }
